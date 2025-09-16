@@ -10,6 +10,7 @@ import Create from './Screens/Create';
 import Profile from './Screens/Profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Define navigation types
 export type RootStackParamList = {
@@ -112,22 +113,24 @@ function App() {
 
   return (
     <ThemeProvider>
-      <NavigationContainer>
-        <RootStack.Navigator screenOptions={{ headerShown: false }}>
-          {isLoggedIn ? (
-            <RootStack.Screen name="MainTabs">
-              {(props) => <MainTabs {...props} onLogout={handleLogout} />}
-            </RootStack.Screen>
-          ) : (
-            <>
-              <RootStack.Screen name="Login">
-                {(props) => <Login {...props} onLoginSuccess={handleLoginSuccess} />}
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <RootStack.Navigator screenOptions={{ headerShown: false }}>
+            {isLoggedIn ? (
+              <RootStack.Screen name="MainTabs">
+                {(props) => <MainTabs {...props} onLogout={handleLogout} />}
               </RootStack.Screen>
-              <RootStack.Screen name="SignUp" component={SignUp} />
-            </>
-          )}
-        </RootStack.Navigator>
-      </NavigationContainer>
+            ) : (
+              <>
+                <RootStack.Screen name="Login">
+                  {(props) => <Login {...props} onLoginSuccess={handleLoginSuccess} />}
+                </RootStack.Screen>
+                <RootStack.Screen name="SignUp" component={SignUp} />
+              </>
+            )}
+          </RootStack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }

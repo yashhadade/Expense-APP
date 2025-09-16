@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, Modal, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Modal, FlatList, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTheme } from '../contexts/ThemeContext';
@@ -7,6 +8,7 @@ import Snackbar from 'react-native-snackbar';
 import expenseServices from '../service/expenseServise';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../components/Button';
+import ThemeHeader from '../components/ThemeHeader';
 
 interface FormValues {
   fieldName: string;
@@ -106,10 +108,7 @@ const Create = () => {
   const handleSubmit = async (values: FormValues, { resetForm }: any) => {
     setIsLoading(true);
     try {
-      console.log(values);
       const res = await expenseServices.createField(values);
-      console.log(res);
-      
       if (res && res.success) {
         setIsLoading(false);
         Snackbar.show({
@@ -145,8 +144,9 @@ const Create = () => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <ThemeHeader title='Add Expense Pool'/>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>Add Expense Pool</Text>
+        {/* <Text style={[styles.title, { color: theme.colors.text }]}>Add Expense Pool</Text> */}
         
         <Formik
           initialValues={initialValues}
@@ -154,7 +154,7 @@ const Create = () => {
           onSubmit={handleSubmit}
         >
           {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, errors, touched }) => (
-            <View style={[styles.form, { backgroundColor: theme.colors.surface }]}>
+            <ScrollView style={[styles.form, { backgroundColor: theme.colors.surface }]} showsVerticalScrollIndicator={false}>
               <Text style={[styles.label, { color: theme.colors.text }]}>Expense Pool Name</Text>
               <TextInput
                 style={[styles.input, { 
@@ -366,7 +366,7 @@ const Create = () => {
               {/* <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.success }]} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Add Expense</Text>
               </TouchableOpacity> */}
-            </View>
+            </ScrollView>
           )}
         </Formik>
       </ScrollView>
@@ -376,7 +376,6 @@ const Create = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
     flex: 1,
     backgroundColor: '#f5f5f5',
   },

@@ -21,11 +21,12 @@ const ThemeHeader: React.FC<ThemeHeaderProps> = ({
     <>
       <StatusBar 
         barStyle={theme.colors.background === '#0f0f0f' ? 'light-content' : 'dark-content'}
-        backgroundColor={theme.colors.surface}
+        backgroundColor="transparent"
+        translucent
       />
       <View style={[styles.header, { 
-        backgroundColor: theme.colors.surface,
-        borderBottomColor: theme.colors.border 
+        backgroundColor: 'transparent',
+        borderBottomColor: 'transparent' 
       }]}>
         <View style={styles.leftSection}>
           {showBackButton && (
@@ -54,12 +55,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderBottomWidth: 1,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    borderBottomWidth: 0,
+    elevation: 0,
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
   },
   leftSection: {
     flex: 1,
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   title: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: '600',
   },
 });

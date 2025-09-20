@@ -11,18 +11,29 @@ import Profile from './Screens/Profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import Fixed from './Screens/Fixed';
+import Edit from './Screens/Edit';
 // Define navigation types
 export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
   MainTabs: undefined;
+  Edit: {
+    expenseData: {
+      fieldName: string;
+      RecivedAmount: string;
+      balance: string;
+      expiry: string;
+    };
+    getExpenseData: () => void;
+  };
 };
 
 export type TabParamList = {
   Home: undefined;
   Create: undefined;
   Profile: undefined;
+  Fixed: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -32,6 +43,7 @@ function MainTabs({ onLogout }: { onLogout: () => void }) {
   const { theme } = useTheme();
   
   return (
+    <>
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
@@ -40,6 +52,7 @@ function MainTabs({ onLogout }: { onLogout: () => void }) {
           if (route.name === "Home") iconText = "📋";
           else if (route.name === "Create") iconText = "➕";
           else if (route.name === "Profile") iconText = "👤";
+          else if (route.name === "Fixed") iconText = "💰";
           return <Text style={{ fontSize: size, color }}>{iconText}</Text>;
         },
        tabBarStyle: {
@@ -68,8 +81,11 @@ function MainTabs({ onLogout }: { onLogout: () => void }) {
   
       })}
     >
-      <Tab.Screen name="Home" component={Home} options={{ title: "Home" }} />
+      <Tab.Screen name="Home" options={{ title: "Home" }}>
+        {(props) => <Home {...props} />}
+      </Tab.Screen>
       <Tab.Screen name="Create" component={Create} options={{ title: "Create" }} />
+      <Tab.Screen name="Fixed" component={Fixed} options={{ title: "Fixed" }} />
       <Tab.Screen 
         name="Profile" 
         options={{ title: "Profile" }}
@@ -77,6 +93,7 @@ function MainTabs({ onLogout }: { onLogout: () => void }) {
         {(props) => <Profile {...props} onLogout={onLogout} />}
       </Tab.Screen>
     </Tab.Navigator>
+    </>
   );
 }
 
@@ -117,9 +134,12 @@ function App() {
         <NavigationContainer>
           <RootStack.Navigator screenOptions={{ headerShown: false }}>
             {isLoggedIn ? (
-              <RootStack.Screen name="MainTabs">
-                {(props) => <MainTabs {...props} onLogout={handleLogout} />}
-              </RootStack.Screen>
+              <>
+                <RootStack.Screen name="MainTabs">
+                  {(props) => <MainTabs {...props} onLogout={handleLogout} />}
+                </RootStack.Screen>
+                <RootStack.Screen name="Edit" component={Edit} />
+              </>
             ) : (
               <>
                 <RootStack.Screen name="Login">

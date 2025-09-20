@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 import Snackbar from 'react-native-snackbar';
@@ -166,7 +167,6 @@ export default Profile;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
     flex: 1,
     backgroundColor: "#f8f9fa",
   },

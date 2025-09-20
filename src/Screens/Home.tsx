@@ -11,15 +11,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../contexts/ThemeContext';
 import expenseServices from '../service/expenseServise';
 import ThemeHeader from '../components/ThemeHeader';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../App';
 
-const Home = () => {
+type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MainTabs'>;
+
+interface HomeProps {
+  navigation: HomeScreenNavigationProp;
+}
+
+const Home: React.FC<HomeProps> = ({ navigation }) => {
   const { theme } = useTheme();
   const [expensePoll, setExpensePoll] = useState<any[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   async function getExpensePoll() {
     try {
-      const res = await expenseServices.getExpensePoll();
+      const res = await expenseServices.getExpensePoll();   
       if (res && res.success) {
         setExpensePoll(res.expenseField);
       }
@@ -27,7 +35,6 @@ const Home = () => {
       console.log(error);
     }
   }
-
   useEffect(() => {
     getExpensePoll();
   }, []);
@@ -65,6 +72,7 @@ const Home = () => {
               opacity: pressed ? 0.85 : 1,
             },
           ]}
+          onPress={() => navigation.navigate('Edit', { expenseData: item, getExpenseData: getExpensePoll })}
         >
           <Text
             style={[
